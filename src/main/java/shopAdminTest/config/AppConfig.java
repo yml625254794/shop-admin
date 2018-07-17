@@ -1,4 +1,4 @@
-package shopadmin.config;
+package shopAdminTest.config;
 
 import javax.sql.DataSource;
 
@@ -21,27 +21,27 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@ComponentScan("shop-admin")
+@ComponentScan("shopAdminTest")
 @EnableWebMvc
-// �?启web mvc基础设施支持
-@MapperScan("shop-admin.mapper")
+// 开启web mvc基础设施支持
+@MapperScan("shopAdminTest.mapper")
 // 扫描指定包下的mapper
 @PropertySource("classpath:jdbc.properties")
 @EnableTransactionManagement
-// �?始spring事务支持
+// 开始spring事务支持
 public class AppConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
 		// TODO Auto-generated method stub
 		// author-list -> /WEB-INF/jsp/author-list.jsp
 		// 对于控制器方法返回的字符串，会用以下规则解析成jsp路径，然后forward
-		// 前缀 + 返回字符�? + 后缀 = jsp路径
+		// 前缀 + 返回字符串 + 后缀 = jsp路径
 		// 前缀 后缀
 		registry.jsp("/WEB-INF/jsp/", ".jsp");
 	}
 
 	@Bean
-	// 配置数据�?
+	// 配置数据源
 	public DataSource ds(Environment env) {
 		DriverManagerDataSource dmd = new DriverManagerDataSource(
 				env.getProperty("jdbc.url"), env.getProperty("jdbc.username"),
@@ -65,10 +65,10 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	// spring事务�?要事务管理器组件（开事务、提交或回滚事务�?
+	// spring事务需要事务管理器组件（开事务、提交或回滚事务）
 	@Bean
 	public PlatformTransactionManager transactionManager(DataSource dataSource) {
-		// 以下是能与mybatis协作的实现类，如用的是hibernate或JPA，那么实现类不一�?
+		// 以下是能与mybatis协作的实现类，如用的是hibernate或JPA，那么实现类不一样
 		return new DataSourceTransactionManager(dataSource);
 	}
 }

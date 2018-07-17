@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace对应Mapper接口名 -->
+<mapper namespace="shopAdminTest.mapper.cellphoneMapper">
+	<select id="findAll" resultType="Cellphone">
+		select c_id id,c_brand brand,c_model model from CELLPHONE 
+	</select>
+	
+	<select id="findOne" resultMap="cellphoneDetails">
+		select c.c_id cell_id,c.c_brand cell_brand,c.c_model cell_model,
+		c.c_cpubrand cell_brand,c.c_ram cell_ram,c.c_storage cell_storage,
+		c.c_color cell_color,c.c_description cell_description,c.c_price cell_price,
+		o.o_id os_id,o.o_name os_name    
+		from CELLPHONE c 
+		inner join OS o on c.c_os=o.o_id 
+		where c_id=#{id}
+	</select>
+	<resultMap type="cellphone" id="cellphoneDetails">
+		<id column="cell_id" property="id"/>
+		<result column="cell_brand" property="brand"/>
+		<result column="cell_model" property="model"/>
+		<result column="cell_cpubrand" property="cpubrand"/>
+		<result column="cell_ram" property="ram"/>
+		<result column="cell_storage" property="storage"/>
+		<result column="cell_color" property="color"/>
+		<result column="cell_description" property="description"/>
+		<result column="cell_price" property="price"/>
+		<association property="os" javaType="Os">
+			<id column="os_id" property="id"/>
+			<result column="os_name" property="name"/>
+		</association>
+	</resultMap>
+	
+	<insert id="create">
+		insert into cellphone(
+		c_id,c_brand,c_model,c_os,c_cpubrand,c_ram,c_storage,c_color,
+		c_description,c_price) 
+		values(cellphone_seq.nextval,#{brand},#{model},#{os.id},#{cpubrand},
+		#{ram},#{storage},#{color},#{description},#{price})
+	</insert>
+	
+	<update id="update">
+		update cellphone set c_brand=#{brand},c_model=#{model},c_os=#{os.id},
+		c_cpubrand=#{cpubrand},c_ram=#{ram},c_storage=#{storage},c_color=#{color},
+		c_description=#{description},c_price=#{price}
+		where c_id=#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cellphone where c_id=#{id}
+	</delete>
+	
+</mapper>
